@@ -4,6 +4,7 @@ export interface Settings {
   boardDice: number[][];
   moveLengthDice: number[][];
   moveTotalDice: number[][];
+  playerNames: string[];
 }
 
 export function mergeWithDefaults(given: Partial<Settings> = {}): Settings {
@@ -18,12 +19,13 @@ export function mergeWithDefaults(given: Partial<Settings> = {}): Settings {
     moveTotalDice: given.moveTotalDice || [
       [1, 2, 3, 4, 5, 6],
       [1, 2, 3, 4, 5, 6]
-    ]
+    ],
+    playerNames: ['player 1', 'player 2']
   };
 }
 
 export function parseFromQueryString(): Settings {
-  const parsed: Partial<Settings> = {};
+  const parsed: Settings = mergeWithDefaults({});
 
   const urlParams = new URLSearchParams(window.location.search);
 
@@ -45,8 +47,16 @@ export function parseFromQueryString(): Settings {
   parseNumber('width');
   parseNumber('height');
   parseDice('boardDice');
-  parseDice('moveLengthDice');
+  parseDice('moveTotalDice');
   parseDice('moveLengthDice');
 
-  return mergeWithDefaults(parsed);
+  if (urlParams.has('player1')) {
+    parsed.playerNames[0] = urlParams.get('player1') as string;
+  }
+
+  if (urlParams.has('player2')) {
+    parsed.playerNames[1] = urlParams.get('player2') as string;
+  }
+
+  return parsed;
 }

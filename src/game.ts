@@ -27,7 +27,6 @@ export class Game {
   isSelectionValid: boolean;
   board: Cell[][];
   possibleSelections: Set<string>;
-  notification: { level: 'info' | 'error'; message: string } | null;
   isOver: boolean;
 
   constructor(settings?: Settings) {
@@ -37,7 +36,6 @@ export class Game {
     this.currentSelection = { cells: [], total: 0 };
     this.moveCount = 0;
     this.currentMove = this.nextMove();
-    this.notification = null;
     this.currentScores = [0, 0];
     this.isSelectionValid = false;
     this.isOver = false;
@@ -70,8 +68,6 @@ export class Game {
         ? randomNumber(0, 1)
         : (this.currentMove.player + 1) % this.playerCount;
 
-    this.setNotification('info', `Player ${player}'s move!`);
-
     const size = this.rollDice(moveLengthDice);
     const target = this.rollDice(moveTotalDice);
 
@@ -92,14 +88,9 @@ export class Game {
     if (!cell || !this.possibleSelections.has(cell.id)) return;
 
     if (this.currentSelection.cells.length >= this.currentMove.size) {
-      this.setNotification(
-        'error',
-        `Cannot select more than ${this.currentMove.size} squares.`
-      );
       return;
     }
 
-    this.clearNotification();
     cell.selected = true;
     this.currentSelection.cells.push(cell);
     this.currentSelection.total = this.calculateSelectionTotal();
@@ -124,7 +115,6 @@ export class Game {
       }
     }
 
-    this.clearNotification();
     this.currentSelection.cells = newSelection;
     this.currentSelection.total = this.calculateSelectionTotal();
     this.possibleSelections = this.calculatePossibleSelections();
@@ -172,6 +162,7 @@ export class Game {
 
     for (let col = 0; col < this.settings.width; col++) {
       if (firstRow[col].owner === 1 || lastRow[col].owner === 0) {
+        this.possibleSelections.clear();
         this.isOver = true;
         return;
       }
@@ -189,29 +180,16 @@ export class Game {
     ];
 
     if (typeof lastSelectedCell.symbol !== 'number') {
-      this.setNotification('error', 'Move must end on a number square.');
       this.isSelectionValid = false;
       return;
     }
 
     if (this.currentSelection.total !== this.currentMove.target) {
-      this.setNotification(
-        'error',
-        `Move must total ${this.currentMove.target}.`
-      );
       this.isSelectionValid = false;
       return;
     }
 
     this.isSelectionValid = true;
-  }
-
-  private clearNotification() {
-    this.notification = null;
-  }
-
-  private setNotification(level: 'info' | 'error', message: string) {
-    this.notification = { level, message };
   }
 
   private calculateScores() {
@@ -227,19 +205,16 @@ export class Game {
     const ownedVisitableCells = new Set();
     const visitQueue: Cell[] = [];
 
-    // Enqueue the home row number cells for non-current player
-    this.forEachCell(cell => {
-      if (typeof cell.symbol !== 'number') return;
-
-      if (
-        this.currentMove.player === 0 &&
-        cell.row === this.settings.height - 1
-      ) {
-        visitQueue.push(cell);
-      } else if (cell.row === 0) {
+    // Enqueue the owned home row number cells for non-current player
+    const opposingHomeRow =
+      this.currentMove.player === 0 ? this.settings.height - 1 : 0;
+    for (let col = 0; col < this.settings.width; col++) {
+      const cell = this.cell(opposingHomeRow, col)!;
+      if (typeof cell.symbol !== 'number') continue;
+      if (cell.owner > -1 && cell.owner !== this.currentMove.player) {
         visitQueue.push(cell);
       }
-    });
+    }
 
     // Visit all adjacent cells owned by non-current player
     while (visitQueue.length) {

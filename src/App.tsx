@@ -5,6 +5,8 @@ import { formatMathExpression } from './helpers';
 import { gameReducer } from './reducer';
 import { parseFromQueryString } from './settings';
 
+const settings = parseFromQueryString();
+
 function BoardCell(props: {
   children: string | number;
   owner: number;
@@ -29,10 +31,7 @@ function BoardCell(props: {
 }
 
 function App() {
-  const [game, dispatch] = useReducer(
-    gameReducer,
-    new Game(parseFromQueryString())
-  );
+  const [game, dispatch] = useReducer(gameReducer, new Game(settings));
 
   const {
     currentMove,
@@ -51,16 +50,18 @@ function App() {
   if (isOver) {
     const [score0, score1] = currentScores;
     if (score0 > score1) {
-      headerContent = `Player 0 wins!`;
+      headerContent = `${settings.playerNames[0]} wins!`;
     } else if (score1 > score0) {
-      headerContent = 'Player 1 wins!';
+      headerContent = `${settings.playerNames[1]} wins!`;
     } else {
       headerContent = "It's a draw!";
     }
   } else {
     headerContent = (
       <>
-        <div className="header-detail">player {currentMove.player}'s turn</div>
+        <div className="header-detail">
+          {settings.playerNames[currentMove.player]}'s turn
+        </div>
 
         <div className="header-detail">
           {currentTotalString}{' '}
@@ -105,8 +106,8 @@ function App() {
     <div className="App">
       <header>
         <div className="header-detail">
-          player 0: <b>{currentScores[0]}</b> squares | player 1:{' '}
-          <b>{currentScores[1]}</b> squares
+          {settings.playerNames[0]}: <b>{currentScores[0]}</b> squares |{' '}
+          {settings.playerNames[1]}: <b>{currentScores[1]}</b> squares
         </div>
 
         {headerContent}
