@@ -144,6 +144,45 @@ function App() {
           ))}
         </div>
       </main>
+      <section>
+        <h2>how to play</h2>
+        <p>
+          Each player starts with some squares on one side of the board (their
+          "home row"). They claim squares each turn until the game ends.
+        </p>
+        <p>
+          Each turn, a player rolls two sets of dice: one determines their
+          target move total, and one determines the maximum squares they can use
+          to get to that total. For example, if a turn has a target of 10 and
+          can use up to 4 squares, they might play <code>(1 + 5) * 2</code> to
+          reach 10.
+        </p>
+        <p>
+          When a player uses a square in a turn, they claim that square. A
+          player may claim a square owned by their opponent; this means they
+          take over that square. All owned squares must be reachable from a
+          player's home row. If a player makes a move that "cuts off" some of
+          their opponent's squares (rendering them unreachable from the
+          opponent's home row), the opponent loses those squares.
+        </p>
+        <p>
+          Players earn a point for each square they have claimed. The game ends
+          when one player claims a square in their opponent's home row. At that
+          point, the scores are finalized, and the highest score wins.
+        </p>
+      </section>
+      <section>
+        <h2>settings</h2>
+        <p>Settings can be changed with query parameters.</p>
+        <p>
+          For example, <code>?player1=A&player2=B&width=20</code> sets player
+          names to "A" and "B", with a board width of 20.
+        </p>
+        <p>Current settings:</p>
+        <pre>
+          <code>{JSON.stringify(settings, null, 2)}</code>
+        </pre>
+      </section>
     </div>
   );
 }

@@ -9,10 +9,26 @@ header {
   text-align: center;
 }
 
-footer {
+section {
   border-top: 1px solid #bbb;
   padding: 16px;
   text-align: center;
+}
+
+section > h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+section > p,
+section > pre {
+  margin: 0 auto;
+  margin-bottom: 16px;
+  max-width: 640px;
+  line-height: 1.5em;
+  text-align: left;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 .header-detail {
