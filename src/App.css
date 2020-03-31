@@ -1,38 +1,86 @@
-.App {
+.app {
+  width: 100%;
+  height: 100%;
+}
+
+header {
+  border-bottom: 1px solid #bbb;
+  padding: 16px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+footer {
+  border-top: 1px solid #bbb;
+  padding: 16px;
+  text-align: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.header-detail {
+  margin-bottom: 8px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.header-button {
+  background-color: none;
+  border: 2px solid currentColor;
+  font-size: 0.8em;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 4px;
 }
 
-.App-link {
-  color: #61dafb;
+main {
+  width: 100%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.current-move-display {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
+    monospace;
+  font-size: 1.2em;
+}
+
+.board {
+  margin: 16px auto;
+}
+
+.row {
+  display: inline-block;
+}
+
+.cell {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
+    monospace;
+  border: none;
+  background: none;
+  font-size: 2rem;
+  width: 50px;
+  height: 50px;
+}
+
+.cell[disabled] {
+  opacity: 1;
+  color: inherit;
+}
+
+.cell:not([disabled]):hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.cell.player-0 {
+  background-color: orange;
+}
+
+.cell.player-1 {
+  background-color: rgb(69, 189, 197);
+}
+
+.cell.selected {
+  outline: 2px solid purple;
+  outline-offset: -4px;
+}
+
+.cell.selectable {
+  outline: 2px dotted green;
+  outline-offset: -4px;
 }
