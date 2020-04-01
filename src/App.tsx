@@ -74,8 +74,8 @@ function App() {
         </div>
 
         <div className="header-detail">
-          using <b>{currentSelection.cells.length}</b> of up to{' '}
-          <b>{currentMove.size}</b> squares
+          using <b>{game.newSelectedCells().length}</b> of up to{' '}
+          <b>{currentMove.size}</b> new squares
         </div>
 
         <button

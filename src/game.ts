@@ -87,7 +87,7 @@ export class Game {
     const cell = this.cell(row, col);
     if (!cell || !this.possibleSelections.has(cell.id)) return;
 
-    if (this.currentSelection.cells.length >= this.currentMove.size) {
+    if (this.newSelectedCells().length >= this.currentMove.size) {
       return;
     }
 
@@ -167,6 +167,12 @@ export class Game {
         return;
       }
     }
+  }
+
+  newSelectedCells() {
+    return this.currentSelection.cells.filter(
+      cell => cell.owner !== this.currentMove.player
+    );
   }
 
   private checkSelectionValid() {
@@ -315,7 +321,7 @@ export class Game {
       return result;
     }
 
-    if (this.currentSelection.cells.length >= this.currentMove.size) {
+    if (this.newSelectedCells().length >= this.currentMove.size) {
       return result;
     }
 
